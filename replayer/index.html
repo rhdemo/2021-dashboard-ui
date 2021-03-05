@@ -12,16 +12,59 @@
     </style>
 </head>
 <body>
-    <canvas id="game-c538ddcce22a3a58" width="500" height="500">
+    <input id="frame" type="number" min="0" step="1">
+    <canvas id="game-c538ddcce22a3a58" width="250" height="250">
     </canvas>
     <script>
-        let canvas = document.getElementById('game-c538ddcce22a3a58');
-        let ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'rgb(200, 0, 0)';
-        ctx.fillRect(10, 10, 50, 50);
+        let board = new BattleshipBoard('game-c538ddcce22a3a58',5,5);
+        let frame = document.getElementById('frame');
+        frame.addEventListener('change', e => {
+            board.frame = e.target.value
+            board.render();
+        });
+        board.frame = frame.value;
+        class BattleshipBoard {
+            constructor(id,cols,rows) {
+                this.canvas = document.getElementById('game-c538ddcce22a3a58')
+                this.context = this.canvas.getContext('2d');
+                this.cells = [this.canvas.clientWidth/cols, this.canvas.clientHeight/rows];
+                this.size = (new Array(rows)).fill((new Array(cols).fill(this.getRandomColor())));
+            }
+            set frame(val) {
 
-        ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-        ctx.fillRect(30, 30, 50, 50);
+            }
+            get data() {
+
+            }
+            set data(val) {
+
+            }
+            render() {
+                this.size.forEach((row,r) => {
+                    row.forEach((col,c) => {
+                        this.context.fillStyle = col;
+                        this.context.fillRect(c*this.cells[0],r*this.cells[1],this.cells[0],this.cells[1]);
+                    });
+                });
+            }
+            getRandomColor() {
+                return `rgb(${Math.floor(100*Math.random())},${Math.floor(100*Math.random())},${Math.floor(100*Math.random())})`;
+            }
+        }
+        fetch('data.json').then(resp => resp.json()).then(data => {
+            // grid is [<100,<200,<300,<400,<500]
+            let ai = data.winner.isAi ? data.winner : data.loser;
+            
+            let attacks = ai.attacks.reduce((a,c) => a.push(ai.attacks.prediction.prob),[]);
+            
+            // let canvas = document.getElementById('game-c538ddcce22a3a58');
+            // let ctx = canvas.getContext('2d');
+            // ctx.fillStyle = 'rgb(200, 0, 0)';
+            // ctx.fillRect(0, 0, 100, 100);
+
+            // ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+            // ctx.fillRect(100, 100, 100, 100);
+        });
     </script>
 </body>
 </html>

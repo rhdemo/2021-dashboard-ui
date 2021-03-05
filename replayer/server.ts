@@ -177,8 +177,8 @@ app.addEventListener('listen', ({hostname, port}) => {
   console.log(`Start listening on ${hostname}:${port}`);
 })
 
-//await app.listen({hostname: "0.0.0.0", port: 8000 });
-await app.listen({hostname: "0.0.0.0", port: 4430, secure: true, certFile: 'localhost.pem', keyFile: 'localhost-key.pem' });
+await app.listen({hostname: "0.0.0.0", port: 8000 });
+      //await app.listen({hostname: "0.0.0.0", port: 4430, secure: true, certFile: 'localhost.pem', keyFile: 'localhost-key.pem' });
 /*
 for await (const req of serve(`:${port}`)) {
   const { conn, r: bufReader, w: bufWriter, headers } = req;
