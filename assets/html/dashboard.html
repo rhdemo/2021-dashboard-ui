@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapeaux WebSocket Component</title>
+    <link rel="stylesheet" href="/assets/css/dashboard.css">
+</head>
+<body>
+    <section>
+        <button onclick="document.getElementById('leaderboard').start()">Start Leaderboard</button>
+        <button onclick="document.getElementById('leaderboard').close()">Stop Leaderboard</button>
+        <cpx-websocket id="leaderboard" url="ws://<%= config.LEADERBOARD_SERVER %>/leaderboard">
+            <template>
+            <h1 data-key="length">Top ${data.length}</h1>
+            <ol>
+                <li data-repeat="data"><a href="/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
+            </ol>
+            </template>
+        </cpx-websocket>
+    </section>
+    <section>
+        <button onclick="document.getElementById('stats').start()">Start Stats</button>
+        <button onclick="document.getElementById('stats').close()">Stop Stats</button>
+        <cpx-websocket id="stats" url="ws://<%= config.STATS_SERVER %>/stats">
+            <template>
+                <table>
+                    <tr><th></th><th>Human</th><th>AI</th></tr>
+                    <tr>
+                        <td>Active</td>
+                        <td data-key="human-active">${human-active}</td>    
+                        <td data-key="ai-active">${ai-active}</td>
+                    </tr>
+                    <tr>
+                        <td>Hits</td>
+                        <td data-key="human-hits">${human-hits}</td>    
+                        <td data-key="ai-hits">${ai-hits}</td>
+                    </tr>
+                    <tr>
+                        <td>Misses</td>
+                        <td data-key="human-misses">${human-misses}</td>    
+                        <td data-key="ai-misses">${ai-misses}</td>
+                    </tr>
+                    <tr>
+                        <th>Ships Sunk</th>
+                    </tr>
+                    <tr>
+                        <td>Submarine</td>
+                        <td data-key="human-submarine-sunks">${subs-sunk}</td>
+                        <td data-key="ai-submarine-sunks">${subs-sunk}</td>
+                    </tr>
+                    <tr>
+                        <td>Carrier</td>
+                        <td data-key="human-carrier-sunks">${carrier-sunk}</td>
+                        <td data-key="ai-carrier-sunks">${carrier-sunk}</td>
+                    </tr>
+                    <tr>
+                        <th>Total Sunk</th>
+                        <td data-key="human-sunks">${human-sunk}</td>    
+                        <td data-key="ai-sunks">${ai-sunk}</td>
+                    </tr>
+                </table>
+            </template>
+        </cpx-websocket>    
+    </section>
+    
+    <script type="module" src="/assets/scripts/cpx-websocket.js"></script>
+</body>
+</html>

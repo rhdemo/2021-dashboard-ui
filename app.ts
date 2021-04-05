@@ -1,7 +1,9 @@
+import { exists } from "https://deno.land/std/fs/exists.ts"
 import { Application, Router, HttpError, Status, send } from "https://deno.land/x/oak/mod.ts";
-// import { walkSync } from "https://deno.land/std/fs/mod.ts";
+import { dashboardHTML, replayerHTML } from './views.ts';
 
 const app = new Application();
+const router = new Router();
 
 // Error Handling
 app.use(async (context, next) => {
@@ -24,13 +26,48 @@ app.use(async (context, next) => {
   }
 });
 
-// Static serving
-app.use(async (ctx) => {
-  await ctx.send({
-    root: `${Deno.cwd()}`,
-    index: 'index.html',
+// Request Routing
+router
+  .get("/", ctx=> {
+    ctx.response.body = "2021 Summit Demo"
+  })
+  .get("/dashboard", ctx=> {
+    ctx.response.body = dashboardHTML;
+  })
+  .get("/replay", ctx=> {
+    ctx.response.body = replayerHTML;
+  })
+  .get("/assets/scripts/:path+", async ctx => {
+    const fileName = `./assets/scripts/${ctx.params['path']}`;
+    ctx.response.type = 'text/javascript';
+    if (await exists(fileName)) {
+      ctx.response.body = await Deno.open(fileName);
+    } else if (await exists(fileName.replace('.js','.ts'))) {
+      const { files, diagnostics } = await Deno.emit(fileName.replace('.js','.ts'), {
+        check: false,
+        bundle: 'esm',
+        compilerOptions: {
+          lib: ['es6','dom'],
+          module: 'es6',
+          target: 'es6'
+        }
+      });
+      if (diagnostics.length) {
+        console.warn(Deno.formatDiagnostics(diagnostics));
+      }
+      ctx.response.body = files['deno:///bundle.js'];
+    } else {
+      ctx.response.body = '';
+    }
+  })
+  .get("/assets/:path+", async ctx => {
+    await send(ctx, ctx.request.url.pathname, {
+      root: `${Deno.cwd()}`
+    });
   });
-});
+
+app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.addEventListener('listen', ({hostname, port}) => {
   console.log(`Serving ${Deno.cwd()}`);

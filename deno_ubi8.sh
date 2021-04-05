@@ -3,7 +3,7 @@ ctr=$(buildah from registry.access.redhat.com/ubi8/ubi-minimal)
 mountpoint=$(buildah mount $ctr)
 mkdir -p $mountpoint/var/www
 buildah config --workingdir /var/www $ctr
-buildah copy $ctr . /var/www
+buildah copy $ctr ./assets /var/www
 buildah config --env DENO_INSTALL=/usr/local $ctr
 buildah config --env PATH=$PATH:/usr/local/bin $ctr
 buildah run --isolation rootless $ctr /bin/sh -c "microdnf update; \
