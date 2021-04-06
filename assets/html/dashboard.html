@@ -8,23 +8,36 @@
     <link rel="stylesheet" href="/assets/css/dashboard.css">
 </head>
 <body>
-    <section>
-        <button onclick="document.getElementById('leaderboard').start()">Start Leaderboard</button>
-        <button onclick="document.getElementById('leaderboard').close()">Stop Leaderboard</button>
-        <cpx-websocket id="leaderboard" url="ws://<%= config.LEADERBOARD_SERVER %>/leaderboard">
-            <template>
-            <h1 data-key="length">Top ${data.length}</h1>
-            <ol>
-                <li data-repeat="data"><a href="/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
-            </ol>
-            </template>
-        </cpx-websocket>
-    </section>
-    <section>
-        <button onclick="document.getElementById('stats').start()">Start Stats</button>
-        <button onclick="document.getElementById('stats').close()">Stop Stats</button>
-        <cpx-websocket id="stats" url="ws://<%= config.STATS_SERVER %>/stats">
-            <template>
+    <article>
+        <section id="leaders">
+            <!-- <button onclick="document.getElementById('leaderboard').start()">Start Leaderboard</button>
+            <button onclick="document.getElementById('leaderboard').close()">Stop Leaderboard</button> -->
+            <cpx-websocket id="leaderboard" url="ws://${LEADERBOARD_SERVER}/leaderboard">
+                <template>
+                <style>
+                    :host {
+                        color: white;
+                        font-family: var(--fontFamily);
+                    }
+                </style>
+                <h1 data-key="length">Top ${data.length}</h1>
+                <ol>
+                    <li data-repeat="data"><a href="/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
+                </ol>
+                </template>
+            </cpx-websocket>
+        </section>
+        <section id="stats">
+            <!-- <button onclick="document.getElementById('stats').start()">Start Stats</button>
+            <button onclick="document.getElementById('stats').close()">Stop Stats</button> -->
+            <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
+                <template>
+                <style>
+                    :host {
+                        color: white;
+                        font-family: var(--fontFamily);
+                    }
+                </style>
                 <table>
                     <tr><th></th><th>Human</th><th>AI</th></tr>
                     <tr>
@@ -61,10 +74,10 @@
                         <td data-key="ai-sunks">${ai-sunk}</td>
                     </tr>
                 </table>
-            </template>
-        </cpx-websocket>    
-    </section>
-    
+                </template>
+            </cpx-websocket>    
+        </section>
+    </article>
     <script type="module" src="/assets/scripts/cpx-websocket.js"></script>
 </body>
 </html>

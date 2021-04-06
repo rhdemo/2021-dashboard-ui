@@ -1,10 +1,17 @@
-import { renderFile } from "https://deno.land/x/dejs/mod.ts";
+const config = new Map([
+    ['LEADERBOARD_SERVER',Deno.env.get('LEADERBOARD_SERVER') || 'localhost:8080'],
+    ['STATS_SERVER', Deno.env.get('STATS_SERVER') || 'localhost:8080'],
+    ['REPLAY_SERVER', Deno.env.get('REPLAY_SERVER') || 'localhost:8080']
+]);
 
-const config = {
-    LEADERBOARD_SERVER: Deno.env.get('LEADERBOARD_SERVER') || 'localhost:8080',
-    STATS_SERVER: Deno.env.get('STATS_SERVER') || 'localhost:8080',
-    REPLAY_SERVER: Deno.env.get('REPLAY_SERVER')
+const dashboardFile = await Deno.readTextFile(`${Deno.cwd()}/assets/html/dashboard.html`);
+const replayerFile = await Deno.readTextFile(`${Deno.cwd()}/assets/html/replayer.html`);
+
+let replaceValues = (str:string, vals:Map<string,string>) => {
+    vals.forEach((v,k) => {
+        str = str.replaceAll('${'+k+'}',v)
+    }); 
+    return str; 
 }
-
-export const dashboardHTML = await renderFile(`${Deno.cwd()}/assets/html/dashboard.html`,{config:config});
-export const replayerHTML = await renderFile(`${Deno.cwd()}/assets/html/replayer.html`, {config:config});
+export const dashboardHTML = replaceValues(dashboardFile, config);
+export const replayerHTML = replaceValues(replayerFile, config);

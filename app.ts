@@ -4,6 +4,7 @@ import { dashboardHTML, replayerHTML } from './views.ts';
 
 const app = new Application();
 const router = new Router();
+let scriptCache = new Map<string,string>();
 
 // Error Handling
 app.use(async (context, next) => {
@@ -29,7 +30,11 @@ app.use(async (context, next) => {
 // Request Routing
 router
   .get("/", ctx=> {
-    ctx.response.body = "2021 Summit Demo"
+    ctx.response.body = `<h1>2021 Summit Demo</h1>
+    <ul>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/replay">Replayer</a></li>
+    </ul>`;
   })
   .get("/dashboard", ctx=> {
     ctx.response.body = dashboardHTML;
@@ -39,9 +44,9 @@ router
   })
   .get("/assets/scripts/:path+", async ctx => {
     const fileName = `./assets/scripts/${ctx.params['path']}`;
-    ctx.response.type = 'text/javascript';
-    if (await exists(fileName)) {
-      ctx.response.body = await Deno.open(fileName);
+    ctx.response.type = 'application/javascript';
+    if (scriptCache.has(fileName)) {
+      ctx.response.body = scriptCache.get(fileName);
     } else if (await exists(fileName.replace('.js','.ts'))) {
       const { files, diagnostics } = await Deno.emit(fileName.replace('.js','.ts'), {
         check: false,
@@ -55,7 +60,8 @@ router
       if (diagnostics.length) {
         console.warn(Deno.formatDiagnostics(diagnostics));
       }
-      ctx.response.body = files['deno:///bundle.js'];
+      scriptCache.set(fileName, files['deno:///bundle.js']);
+      ctx.response.body = scriptCache.get(fileName);
     } else {
       ctx.response.body = '';
     }
