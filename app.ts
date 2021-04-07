@@ -1,6 +1,26 @@
 import { exists } from "https://deno.land/std/fs/exists.ts"
 import { Application, Router, HttpError, Status, send } from "https://deno.land/x/oak/mod.ts";
-import { dashboardHTML, replayerHTML } from './views.ts';
+
+let leaderboardUrl = Deno.env.get("LEADERBOARD_SERVER");
+let statsUrl = Deno.env.get("STATS_SERVER");
+let replayUrl = Deno.env.get("REPLAY_SERVER");
+
+let config = new Map();
+config.set('LEADERBOARD_SERVER', leaderboardUrl);
+config.set('STATS_SERVER', statsUrl);
+config.set('REPLAY_SERVER', replayUrl)
+
+console.log(config);
+
+function replaceValues(str:string, vals:Map<string,string>) {
+  vals.forEach((v,k) => {
+      str = str.replaceAll('${'+k+'}',v)
+  }); 
+  return str; 
+}
+
+const dashboardFile = replaceValues(await Deno.readTextFile(`${Deno.cwd()}/assets/html/dashboard.html`), config);
+const replayerFile = replaceValues(await Deno.readTextFile(`${Deno.cwd()}/assets/html/replayer.html`),config);
 
 const app = new Application();
 const router = new Router();
@@ -30,17 +50,20 @@ app.use(async (context, next) => {
 // Request Routing
 router
   .get("/", ctx=> {
-    ctx.response.body = `<h1>2021 Summit Demo</h1>
+    ctx.response.type = 'text/html; charset=utf-8';
+    ctx.response.body = `<!doctype html><html><body><h1>2021 Summit Demo</h1>
     <ul>
       <li><a href="/dashboard">Dashboard</a></li>
       <li><a href="/replay">Replayer</a></li>
-    </ul>`;
+    </ul></body></html>`;
   })
-  .get("/dashboard", ctx=> {
-    ctx.response.body = dashboardHTML;
+  .get("/dashboard", async ctx=> {
+    ctx.response.type = 'text/html; charset=utf-8';
+    ctx.response.body = replaceValues(await Deno.readTextFile(`${Deno.cwd()}/assets/html/dashboard.html`), config);
   })
-  .get("/replay", ctx=> {
-    ctx.response.body = replayerHTML;
+  .get("/replay", async ctx=> {
+    ctx.response.type = 'text/html; charset=utf-8';
+    ctx.response.body = replaceValues(await Deno.readTextFile(`${Deno.cwd()}/assets/html/replayer.html`), config);
   })
   .get("/assets/scripts/:path+", async ctx => {
     const fileName = `./assets/scripts/${ctx.params['path']}`;
