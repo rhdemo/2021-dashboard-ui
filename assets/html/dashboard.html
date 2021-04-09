@@ -16,17 +16,45 @@
                     :host {
                         color: white;
                         font-family: var(--fontFamily);
+                        overflow: scroll;
+                        max-height: 100%;
+                        color: #fff;
+                        text-shadow: 2px 2px 0 var(--dark-green);
+                    }
+                    h1 {
+                        margin: var(--heading1Margin); 
+                        font-size: var(--heading1FontSize);
+                        text-align: center;
+                    }
+                    h2 {
+                        font-size: var(--heading2FontSize);
+                        margin: var(--heading2Margin);
+                    }
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                        font-size: var(--listFontSize);
+                    }
+                    li {
+                        margin-bottom: var(--listMarginBottom);
+                        color: var(--green);
+                        text-shadow: 2px 2px 0 var(--dark-green);
+                        display: flex;
+                        justify-content: space-between;
+                    }                    
+                    var {
+                        font-style: normal;
                     }
                 </style>
                 <h1>Top ${length}</h1>
                 <ol data-repeat>
-                    <li><a href="/replay/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
+                    <li><span><a href="/replay/${gameId}" onclick="return false;">${userName}</a></span><span>${score}</span></li>
                 </ol>
                 </template>
             </cpx-websocket>
         </section>
         <section id="stats">
-            <!-- <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
+            <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
                 <template>
                 <style>
                     :host {
@@ -34,6 +62,32 @@
                         font-family: var(--fontFamily);
                         overflow: scroll;
                         max-height: 100%;
+                        color: #fff;
+                        text-shadow: 2px 2px 0 var(--dark-green);
+                    }
+                    h1 {
+                        margin: var(--heading1Margin); 
+                        font-size: var(--heading1FontSize);
+                        text-align: center;
+                    }
+                    h2 {
+                        font-size: var(--heading2FontSize);
+                        margin: var(--heading2Margin);
+                    }
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                        font-size: var(--listFontSize);
+                    }
+                    li {
+                        margin-bottom: var(--listMarginBottom);
+                        color: var(--green);
+                        text-shadow: 2px 2px 0 var(--dark-green);
+                        display: flex;
+                        justify-content: space-between;
+                    }                    
+                    var {
+                        font-style: normal;
                     }
                 </style>
                 <h1>Game Data</h1>
@@ -46,52 +100,25 @@
                 </ul>
                 <h2>Humans</h2>
                 <ul>
-                    <li>Total shots<span></span><span data-key="">${human-shots}</span></li>
-                    <li><span>Total misses</span><span data-key="">${}</span></li>
+                    <li>Total shots<span></span><span>${human-shots}</span></li>
+                    <li><span>Total misses</span><span>${human-misses}</span></li>
                 </ul>
                 <h2>Artificial intelligence</h2>
                 <ul>
-                    <li>Total shots<span></span><span data-key="">${}</span></li>
-                    <li><span>Total misses</span><span data-key="">${}</span></li>
+                    <li>Total shots<span></span><span>${ai-shots}</span></li>
+                    <li><span>Total misses</span><span>${ai-misses}</span></li>
                 </ul>
-                <table>
-                    <tr><th></th><th>Human</th><th>AI</th></tr>
-                    <tr>
-                        <td>Active</td>
-                        <td>${human-active}</td>    
-                        <td data-key="ai-active">${ai-active}</td>
-                    </tr>
-                    <tr>
-                        <td>Hits</td>
-                        <td data-key="human-hits">${human-hits}</td>    
-                        <td data-key="ai-hits">${ai-hits}</td>
-                    </tr>
-                    <tr>
-                        <td>Misses</td>
-                        <td data-key="human-misses">${human-misses}</td>    
-                        <td data-key="ai-misses">${ai-misses}</td>
-                    </tr>
-                    <tr>
-                        <th>Ships Sunk</th>
-                    </tr>
-                    <tr>
-                        <td>Submarine</td>
-                        <td data-key="human-submarine-sunks">${subs-sunk}</td>
-                        <td data-key="ai-submarine-sunks">${subs-sunk}</td>
-                    </tr>
-                    <tr>
-                        <td>Carrier</td>
-                        <td data-key="human-carrier-sunks">${carrier-sunk}</td>
-                        <td data-key="ai-carrier-sunks">${carrier-sunk}</td>
-                    </tr>
-                    <tr>
-                        <th>Total Sunk</th>
-                        <td data-key="human-sunks">${human-sunk}</td>    
-                        <td data-key="ai-sunks">${ai-sunk}</td>
-                    </tr>
-                </table>
+                <!-- <h2>Ships</h2>
+                <ul>
+                    <li><span>Human Subs sunk</span><span>${human-submarine-sunks}</span></li>
+                    <li><span>AI Subs sunk</span><span>${ai-submarine-sunks}</span></li>
+                    <li><span>Human Carriers sunk</span><span>${human-carrier-sunks}</span></li>
+                    <li><span>AI Carriers sunk</span><span>${ai-carrier-sunks}</span></li>
+                    <li><span>Total Human sunk</span><span>${human-sunks}</span></li>
+                    <li><span>Total AI sunk</span><span>${ai-sunks}</span></li>
+                </ul> -->
                 </template>
-            </cpx-websocket>     -->
+            </cpx-websocket>    
         </section>
     </article>
     <script type="module" src="/assets/scripts/cpx-websocket.js"></script>

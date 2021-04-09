@@ -43,6 +43,7 @@ export class CPXWebSocket extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.template = this.querySelector('template').cloneNode(true);
+        this.prepTemplate();
         //document.createElement('template');
 
         this.logState = this.logState.bind(this);
@@ -58,7 +59,6 @@ export class CPXWebSocket extends HTMLElement {
         this.socket.addEventListener('message', this.logMessage);
         this.socket.addEventListener('close', this.logState);
         this.socket.addEventListener('error', this.logError);
-        this.render();
     }
 
     static get observedAttributes() {
@@ -69,37 +69,43 @@ export class CPXWebSocket extends HTMLElement {
         this[name] = newVal;
     }
 
-    render() {
-        /*
-        data-key = in the scope, place the data[key] in any delimiter
-        data-repeat = iterate over the scoped item
-        */
-        let objEls = this.shadowRoot.querySelectorAll('[data-repeat]');
-        if (objEls.length > 0) {
-            objEls.forEach(el=> {
+    prepTemplate() {
+        let repeatEls = this.shadowRoot.querySelectorAll('[data-repeat]');
+        if (repeatEls.length > 0) {
+            repeatEls.forEach(el=> {
                 let dr = el.getAttribute('data-repeat');
                 if (dr.length === 0) {
                     let drtxt = btoa(el.innerHTML.trim());
                     el.setAttribute('data-repeat',drtxt);
                     while (el.firstChild) { el.removeChild(el.firstChild); }
-                } else {
-                    
-                }
+                } 
             });
         }
+        this.template.innerHTML = this.template.innerHTML.replaceAll(/\${([^{]+[^}])}/g,'<var data-val="$1"></var>');
+    }
+
+    render() {
         if(this.data) {
+            let repeatEls = this.shadowRoot.querySelectorAll('[data-repeat]');
+            if (repeatEls.length >0) {
+                repeatEls.forEach(el=>{
+                    while (el.firstChild) { el.removeChild(el.firstChild); }
+                });                
+            }
             this.data.forEach((v,k)=> {
                 //console.log('Val',k,' - ',v)
                 switch (typeof v) {
                     case 'object':
-                        
+                        if(repeatEls.length >0) {
+                            repeatEls.forEach(el=> {
+
+                            });
+                        }                
                         break;
                     default:
                         // See if any instances of the string exist
                         let els = this.shadowRoot.querySelectorAll(`var[data-val=${k}]`);
-                        if (els.length === 0) {
-                            this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',`<var data-val="${k}">${v}</var>`);
-                        } else {
+                        if (els.length !== 0) {
                             els.forEach(el=> {
                                 el.innerHTML = v;
                             });
@@ -140,6 +146,10 @@ export class CPXWebSocket extends HTMLElement {
             }
             
         }
+    }
+
+    replaceData(el, data, tmpl) {
+
     }
 
     start() {

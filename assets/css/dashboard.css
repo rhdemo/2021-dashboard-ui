@@ -1,20 +1,41 @@
 @font-face{ 
 	font-family: 'dogica';
-	src: url('./assets/fonts/dogica.woff') format('woff');
+	src: url('/assets/fonts/dogica.woff') format('woff');
 }
 
 @font-face{ 
 	font-family: 'dogica-bold';
-	src: url('./assets/fonts/dogicabold.woff') format('woff');
+	src: url('/assets/fonts/dogicabold.woff') format('woff');
 }
 
-body {
-    background-color: #2795f5;
-}
 :root {
-    --fontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    --fontFamily: 'dogica', sans-serif;
+    
+    --heading1FontSize: 24px;
+    --heading1Margin: 0 0 16px;
+    --heading2FontSize: 20px;
+    --heading2Margin: 24px 0;
+    --listMarginBottom: 14px;
+    --listFontSize: 18px;
+
+    --green : #7ac49e;
+    --dark-green: #161c01;
+    --dark-purple: #151628;
+    --light-purple: #343a62;
+    --ocean: #2795f5;
+    --gold: #efc100;
+    --silver: #939393;
+    --bronze: #c1947a;
+    --grid-bg: #14281d;
+    --sky: #64d8fa;
+
+}
+
+
+body {
+    font-family: var(--fontFamily);
+    display: grid;
+    background: var(--ocean);
 }
 
 article {
