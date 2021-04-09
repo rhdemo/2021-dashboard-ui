@@ -10,8 +10,6 @@
 <body>
     <article>
         <section id="leaders">
-            <!-- <button onclick="document.getElementById('leaderboard').start()">Start Leaderboard</button>
-            <button onclick="document.getElementById('leaderboard').close()">Stop Leaderboard</button> -->
             <cpx-websocket id="leaderboard" url="ws://${LEADERBOARD_SERVER}/leaderboard">
                 <template>
                 <style>
@@ -20,29 +18,47 @@
                         font-family: var(--fontFamily);
                     }
                 </style>
-                <h1 data-key="length">Top ${data.length}</h1>
-                <ol>
-                    <li data-repeat="data"><a href="/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
+                <h1>Top ${length}</h1>
+                <ol data-repeat>
+                    <li><a href="/replay/${gameId}" onclick="return false;">${userName}</a>.....${score}</li>
                 </ol>
                 </template>
             </cpx-websocket>
         </section>
         <section id="stats">
-            <!-- <button onclick="document.getElementById('stats').start()">Start Stats</button>
-            <button onclick="document.getElementById('stats').close()">Stop Stats</button> -->
-            <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
+            <!-- <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
                 <template>
                 <style>
                     :host {
                         color: white;
                         font-family: var(--fontFamily);
+                        overflow: scroll;
+                        max-height: 100%;
                     }
                 </style>
+                <h1>Game Data</h1>
+                <ul>
+                    <li><span>Players</span><span>${human-active}</span></li>
+                    <li><span>Games played</span><span>${games-played}</span></li>
+                    <li><span>Bonus points</span><span>${bonus-points}</span></li>
+                    <li><span>Ships sunk</span><span>${total-sunk}</span></li>
+                    <li><span>hit/miss</span><span>${total-hits}/${total-misses}</span></li>
+                </ul>
+                <h2>Humans</h2>
+                <ul>
+                    <li>Total shots<span></span><span data-key="">${human-shots}</span></li>
+                    <li><span>Total misses</span><span data-key="">${}</span></li>
+                </ul>
+                <h2>Artificial intelligence</h2>
+                <ul>
+                    <li>Total shots<span></span><span data-key="">${}</span></li>
+                    <li><span>Total misses</span><span data-key="">${}</span></li>
+                </ul>
                 <table>
                     <tr><th></th><th>Human</th><th>AI</th></tr>
                     <tr>
                         <td>Active</td>
-                        <td data-key="human-active">${human-active}</td>    
+                        <td>${human-active}</td>    
                         <td data-key="ai-active">${ai-active}</td>
                     </tr>
                     <tr>
@@ -75,7 +91,7 @@
                     </tr>
                 </table>
                 </template>
-            </cpx-websocket>    
+            </cpx-websocket>     -->
         </section>
     </article>
     <script type="module" src="/assets/scripts/cpx-websocket.js"></script>

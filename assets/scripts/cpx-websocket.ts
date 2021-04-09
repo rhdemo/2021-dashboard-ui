@@ -18,7 +18,7 @@ export class CPXWebSocket extends HTMLElement {
         this._socket = val;
     }
 
-    _data:any;
+    _data:Map<string,any>;
     get data() { return this._data; }
     set data(val) {
         if (this._data === val) return;
@@ -53,7 +53,6 @@ export class CPXWebSocket extends HTMLElement {
     connectedCallback() {
         //this.template.innerHTML = this.querySelector('template').innerText;
         // this.shadowRoot.appendChild(this.cssStyles);
-        
         this.socket = new WebSocket(this.url);
         this.socket.addEventListener('open', this.logState);
         this.socket.addEventListener('message', this.logMessage);
@@ -75,34 +74,71 @@ export class CPXWebSocket extends HTMLElement {
         data-key = in the scope, place the data[key] in any delimiter
         data-repeat = iterate over the scoped item
         */
-       if(this.data) {
-           //console.log(this.data);
-        this.template = this.querySelector('template').cloneNode(true);
-        let tmplKeys = this.template.content.querySelectorAll('[data-key]');
-        tmplKeys.forEach(el => {
-            //console.log(this.data[el.getAttribute('data-key')]);
-            el.innerHTML = el.innerHTML.replace(/\${([^{]+[^}])}/g, this.data[el.getAttribute('data-key')]||'');
-        });
-        let tmplRepeats = this.template.content.querySelectorAll('[data-repeat]');
-        tmplRepeats.forEach(el => {
-            let attr = el.getAttribute('data-repeat');
-            let scope = attr === 'data' ? this.data : this.data[attr];
-            let items = el.innerHTML.match(/\${[^{]+[^}]}/g);
-            if(items && items.length > 0) {
-                let html = el.outerHTML;
-                let result = '';
-                for(let i=0; i<scope.length; i++) {
-                    result = `${result}
-                    ${items.reduce((a,c) => {
-                        //console.log(`Reduce: ${a},${c},${scope[i][c.replace(/[\$\{\}]/g,'')]}`);
-                        return a.replace(c,scope[i][c.replace(/[\$\{\}]/g,'')]);
-                    },html)}`;
+        let objEls = this.shadowRoot.querySelectorAll('[data-repeat]');
+        if (objEls.length > 0) {
+            objEls.forEach(el=> {
+                let dr = el.getAttribute('data-repeat');
+                if (dr.length === 0) {
+                    let drtxt = btoa(el.innerHTML.trim());
+                    el.setAttribute('data-repeat',drtxt);
+                    while (el.firstChild) { el.removeChild(el.firstChild); }
+                } else {
+                    
                 }
-                el.parentNode.innerHTML = result;
+            });
+        }
+        if(this.data) {
+            this.data.forEach((v,k)=> {
+                //console.log('Val',k,' - ',v)
+                switch (typeof v) {
+                    case 'object':
+                        
+                        break;
+                    default:
+                        // See if any instances of the string exist
+                        let els = this.shadowRoot.querySelectorAll(`var[data-val=${k}]`);
+                        if (els.length === 0) {
+                            this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',`<var data-val="${k}">${v}</var>`);
+                        } else {
+                            els.forEach(el=> {
+                                el.innerHTML = v;
+                            });
+                        }
+                        //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
+                        break;
+                }
+                //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
+            })
+            /*
+            let tmplKeys = this.template.content.querySelectorAll('[data-key]');
+            tmplKeys.forEach(el => {
+                //console.log(this.data[el.getAttribute('data-key')]);
+                el.innerHTML = el.innerHTML.replace(/\${([^{]+[^}])}/g, this.data[el.getAttribute('data-key')]||'');
+            });
+            */
+            // let tmplRepeats = this.template.content.querySelectorAll('[data-repeat]');
+            // tmplRepeats.forEach(el => {
+            //     let attr = el.getAttribute('data-repeat');
+            //     let scope = attr === 'data' ? this.data : this.data[attr];
+            //     let items = el.innerHTML.match(/\${[^{]+[^}]}/g);
+            //     if(items && items.length > 0) {
+            //         let html = el.outerHTML;
+            //         let result = '';
+            //         for(let i=0; i<scope.length; i++) {
+            //             result = `${result}
+            //             ${items.reduce((a,c) => {
+            //                 //console.log(`Reduce: ${a},${c},${scope[i][c.replace(/[\$\{\}]/g,'')]}`);
+            //                 return a.replace(c,scope[i][c.replace(/[\$\{\}]/g,'')]);
+            //             },html)}`;
+            //         }
+            //         el.parentNode.innerHTML = result;
+            //     }
+            // });
+            if (!this.shadowRoot.firstChild) {
+                //while (this.shadowRoot.firstChild) { this.shadowRoot.removeChild(this.shadowRoot.firstChild); }
+                this.shadowRoot.appendChild(this.template.content.cloneNode(true));
             }
-        });
-        while (this.shadowRoot.firstChild) { this.shadowRoot.removeChild(this.shadowRoot.firstChild); }
-        this.shadowRoot.appendChild(this.template.content.cloneNode(true));
+            
         }
     }
 
@@ -112,17 +148,18 @@ export class CPXWebSocket extends HTMLElement {
         }
     }
 
-    stop() { return this.close; }
-    close() {
-        this.socket.close()
-    }
+    stop() { this.socket.close(); }
+    close() { this.socket.close(); }
     
     logState(e) {
         console.log('ReadyState:', ['connecting','open','closing','closed'][this.socket.readyState]);
     }
 
     logMessage(e) {
-        this.data = JSON.parse(e.data);
+        const message = JSON.parse(e.data);
+        const msgData = new Map<string, any>(Object.entries(message));
+        if (message.length) { msgData.set('length',message.length); }
+        this.data = msgData;
         //console.log(e.data);
     }
 

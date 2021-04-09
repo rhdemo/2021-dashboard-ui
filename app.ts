@@ -75,9 +75,9 @@ router
         check: false,
         bundle: 'esm',
         compilerOptions: {
-          lib: ['es6','dom'],
+          lib: ['esnext','dom'],
           module: 'es6',
-          target: 'es6'
+          target: 'es2017'
         }
       });
       if (diagnostics.length) {

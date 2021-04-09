@@ -25,7 +25,7 @@
         });
         board.frame = frame.value;
         
-        fetch('data.json').then(resp => resp.json()).then(data => {
+        fetch('/assets/data/data.json').then(resp => resp.json()).then(data => {
             // grid is [<100,<200,<300,<400,<500]
             let ai = data.winner.isAi ? data.winner : data.loser;
             console.log(ai.attacks);
