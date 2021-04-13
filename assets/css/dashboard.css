@@ -1,11 +1,11 @@
 @font-face{ 
 	font-family: 'dogica';
-	src: url('/assets/fonts/dogica.woff') format('woff');
+	src: url('/fonts/dogica.woff') format('woff');
 }
 
 @font-face{ 
 	font-family: 'dogica-bold';
-	src: url('/assets/fonts/dogicabold.woff') format('woff');
+	src: url('/fonts/dogicabold.woff') format('woff');
 }
 
 :root {
@@ -14,8 +14,8 @@
     --heading1FontSize: 24px;
     --heading1Margin: 0 0 16px;
     --heading2FontSize: 20px;
-    --heading2Margin: 24px 0;
-    --listMarginBottom: 14px;
+    --heading2Margin: 20px 0;
+    --listMarginBottom: 10px;
     --listFontSize: 18px;
 
     --green : #7ac49e;
@@ -46,13 +46,14 @@ article {
     grid-gap: 48px;
     grid-template-columns: 1fr 1fr;
     padding: 50px 65px 150px 65px;
-    background: url('/assets/img/dashboard-bg.png') no-repeat;
+    background: url('/img/dashboard-bg.png') no-repeat;
     background-size: contain;
 }
 
 section {
     padding: 1em;
-    margin: 0 auto;
+    max-width: 480px;
+    /* margin: 0 auto; */
 }
 #leaders {
 

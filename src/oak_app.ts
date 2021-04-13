@@ -103,38 +103,4 @@ app.addEventListener('listen', ({hostname, port}) => {
   console.log(`Start listening on ${hostname}:${port}`);
 });
 
-// async function bundleFiles(path:string) {
-//   const { files, diagnostics } = await Deno.emit(path,{
-//       check: false,
-//       bundle: "esm",
-//       compilerOptions: {
-//           lib: ["es6", "dom"],
-//           module: 'es6',
-//           target: 'es6'
-//       }
-//   });
-//   if (diagnostics.length) {
-//       console.warn(Deno.formatDiagnostics(diagnostics));
-//   }
-//   Deno.writeTextFile(path.replace('/src','').replace('.ts','.js'), files['deno:///bundle.js']);
-// }
-
-
-// let watchPaths = Array.from([...walkSync('.')])
-//     .filter(path=>path.isDirectory&&(/components\/.+\/(?:src|demo)/).test(path.path))
-//     .map(path=>path.path);
-
-// const watcher = Deno.watchFs(watchPaths, {recursive: true});
-// for await (const event of watcher) {
-//     console.log(event);
-//     event.paths.map(path=> {
-//         if ((/components\/.+\/src/).test(path)) {
-//             bundleFiles(path);
-//         } else {
-
-//         }
-//     });
-// }
-
-
 await app.listen({hostname: "0.0.0.0", port: 8000 });

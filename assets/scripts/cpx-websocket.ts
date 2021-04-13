@@ -70,7 +70,7 @@ export class CPXWebSocket extends HTMLElement {
     }
 
     prepTemplate() {
-        let repeatEls = this.shadowRoot.querySelectorAll('[data-repeat]');
+        let repeatEls = this.template.content.querySelectorAll('[data-repeat]');
         if (repeatEls.length > 0) {
             repeatEls.forEach(el=> {
                 let dr = el.getAttribute('data-repeat');
@@ -84,37 +84,50 @@ export class CPXWebSocket extends HTMLElement {
         this.template.innerHTML = this.template.innerHTML.replaceAll(/\${([^{]+[^}])}/g,'<var data-val="$1"></var>');
     }
 
+    renderTemplate(data, ele?) {
+        let eltmpl;
+        if (ele.getAttribute) {
+            eltmpl = ele.getAttribute('data-repeat');
+        }
+        data.forEach((v,k)=> {
+            switch (typeof v) {
+                case 'object':
+                    if (eltmpl) {
+                        let tmpl = atob(eltmpl)
+                        for (const [key,val] of Object.entries(v)) {
+                            tmpl = tmpl.replaceAll('${'+key+'}',val);
+                        };
+                        ele.innerHTML += tmpl;
+                    }
+                    break;
+                default:
+                    // See if any instances of the string exist
+                    let els = ele.querySelectorAll(`var[data-val=${k}]`);
+                    if (els.length !== 0) {
+                        els.forEach(el=> {
+                            el.innerHTML = v;
+                        });
+                    } else {
+
+                    }
+                    //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
+                    break;
+            }
+            //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
+        })
+    }
+
     render() {
         if(this.data) {
             let repeatEls = this.shadowRoot.querySelectorAll('[data-repeat]');
             if (repeatEls.length >0) {
                 repeatEls.forEach(el=>{
                     while (el.firstChild) { el.removeChild(el.firstChild); }
+                    this.renderTemplate(this.data, el);
                 });                
-            }
-            this.data.forEach((v,k)=> {
-                //console.log('Val',k,' - ',v)
-                switch (typeof v) {
-                    case 'object':
-                        if(repeatEls.length >0) {
-                            repeatEls.forEach(el=> {
-
-                            });
-                        }                
-                        break;
-                    default:
-                        // See if any instances of the string exist
-                        let els = this.shadowRoot.querySelectorAll(`var[data-val=${k}]`);
-                        if (els.length !== 0) {
-                            els.forEach(el=> {
-                                el.innerHTML = v;
-                            });
-                        }
-                        //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
-                        break;
-                }
-                //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
-            })
+            } 
+            this.renderTemplate(this.data, this.shadowRoot);
+            
             /*
             let tmplKeys = this.template.content.querySelectorAll('[data-key]');
             tmplKeys.forEach(el => {

@@ -14,33 +14,20 @@
 <body>
     <rh-battleship id="game-c538ddcce22a3a58" width="250" height="250" frame="0"></rh-battleship>
     <input id="frame" value="0" type="number" min="0" step="1" onchange="e=> document.querySelector('rh-battleship').setAttribute('frame',e.target.value);">
-    <script src="/assets/scripts/rh-battleship.js"></script>
+    <script src="/scripts/rh-battleship.js"></script>
     <script>
+        let gameData = <% replayData %>;
         let board = document.querySelector('rh-battleship');
         let frame = document.getElementById('frame');
+        board.data = gameData;
         frame.addEventListener('change', e => {
             console.log("Changed:",e.target.value);
             board.frame = e.target.value;
             board.render();
-        });
+        }); 
         board.frame = frame.value;
-        
-        fetch('/assets/data/data.json').then(resp => resp.json()).then(data => {
-            // grid is [<100,<200,<300,<400,<500]
-            let ai = data.winner.isAi ? data.winner : data.loser;
-            console.log(ai.attacks);
-            let attacks = ai.attacks.reduce((a,c) => {
-                a=a+c.attack.prediction;
-            },[]);
-            
-            // let canvas = document.getElementById('game-c538ddcce22a3a58');
-            // let ctx = canvas.getContext('2d');
-            // ctx.fillStyle = 'rgb(200, 0, 0)';
-            // ctx.fillRect(0, 0, 100, 100);
 
-            // ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-            // ctx.fillRect(100, 100, 100, 100);
-        });
+        
     </script>
 </body>
 </html>

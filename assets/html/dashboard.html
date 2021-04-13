@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chapeaux WebSocket Component</title>
-    <link rel="stylesheet" href="/assets/css/dashboard.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
     <article>
         <section id="leaders">
-            <cpx-websocket id="leaderboard" url="ws://${LEADERBOARD_SERVER}/leaderboard">
+            <cpx-websocket id="leaderboard" url="ws://<% leaderboardUrl %>/leaderboard">
                 <template>
                 <style>
                     :host {
@@ -30,7 +30,7 @@
                         font-size: var(--heading2FontSize);
                         margin: var(--heading2Margin);
                     }
-                    ul {
+                    ol {
                         list-style: none;
                         padding: 0;
                         font-size: var(--listFontSize);
@@ -38,23 +38,40 @@
                     li {
                         margin-bottom: var(--listMarginBottom);
                         color: var(--green);
+                        
                         text-shadow: 2px 2px 0 var(--dark-green);
                         display: flex;
                         justify-content: space-between;
-                    }                    
+                    }  
+                    li span:first-child {
+                        overflow: hidden; /* Ensures the content is not revealed until the animation */
+                        white-space: nowrap; /* Keeps the content on a single line */
+                        letter-spacing: .15em; /* Adjust as needed */
+                        /* animation: 
+                            typing 2.5s steps(40, end);                         */
+                    }
+                    a {
+                        color: var(--green);
+                        text-decoration: none;
+                    }                  
                     var {
                         font-style: normal;
+                    }
+                    /* The typing effect */
+                    @keyframes typing {
+                        from { width: 0 }
+                        to { width: 100% }
                     }
                 </style>
                 <h1>Top ${length}</h1>
                 <ol data-repeat>
-                    <li><span><a href="/replay/${gameId}" onclick="return false;">${userName}</a></span><span>${score}</span></li>
+                    <li><span><a href="/replay/${userId}">${userName}</a>...................</span><span>${score}</span></li>
                 </ol>
                 </template>
             </cpx-websocket>
         </section>
         <section id="stats">
-            <cpx-websocket id="stats" url="ws://${STATS_SERVER}/stats">
+            <cpx-websocket id="stats" url="ws://<% statsUrl %>/stats">
                 <template>
                 <style>
                     :host {
@@ -85,28 +102,39 @@
                         text-shadow: 2px 2px 0 var(--dark-green);
                         display: flex;
                         justify-content: space-between;
-                    }                    
+                    } 
+                    li span:first-child {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        animation: 
+                            typing 2.5s steps(40, end);          
+                    }                   
                     var {
                         font-style: normal;
+                    }
+                    /* The typing effect */
+                    @keyframes typing {
+                        from { width: 0 }
+                        to { width: 100% }
                     }
                 </style>
                 <h1>Game Data</h1>
                 <ul>
-                    <li><span>Players</span><span>${human-active}</span></li>
-                    <li><span>Games played</span><span>${games-played}</span></li>
-                    <li><span>Bonus points</span><span>${bonus-points}</span></li>
-                    <li><span>Ships sunk</span><span>${total-sunk}</span></li>
-                    <li><span>hit/miss</span><span>${total-hits}/${total-misses}</span></li>
+                    <li><span>Players...................</span><span>${human-active}</span></li>
+                    <li><span>Games played...................</span><span>${games-played}</span></li>
+                    <li><span>Bonus points...................</span><span>${human-bonus}</span></li>
+                    <li><span>Ships sunk...................</span><span>${total-sunk}</span></li>
+                    <li><span>Hit/miss...................</span><span>${total-hits}/${total-misses}</span></li>
                 </ul>
                 <h2>Humans</h2>
                 <ul>
-                    <li>Total shots<span></span><span>${human-shots}</span></li>
-                    <li><span>Total misses</span><span>${human-misses}</span></li>
+                    <li><span>Total shots...................<span></span><span>${human-shots}</span></li>
+                    <li><span>Total misses...................</span><span>${human-misses}</span></li>
                 </ul>
                 <h2>Artificial intelligence</h2>
                 <ul>
-                    <li>Total shots<span></span><span>${ai-shots}</span></li>
-                    <li><span>Total misses</span><span>${ai-misses}</span></li>
+                    <li><span>Total shots...................<span></span><span>${ai-shots}</span></li>
+                    <li><span>Total misses...................</span><span>${ai-misses}</span></li>
                 </ul>
                 <!-- <h2>Ships</h2>
                 <ul>
@@ -121,6 +149,6 @@
             </cpx-websocket>    
         </section>
     </article>
-    <script type="module" src="/assets/scripts/cpx-websocket.js"></script>
+    <script type="module" src="/scripts/cpx-websocket.js"></script>
 </body>
 </html>

@@ -67,7 +67,6 @@ class RHBattleship extends HTMLElement {
         `;
         if (css.styleSheet) css.styleSheet.cssText = styles;
         else css.appendChild(document.createTextNode(styles))
-        console.log(css);
         return css;
     }
     get size() { return [this.width,this.height]; }
@@ -110,7 +109,7 @@ class RHBattleship extends HTMLElement {
 
     }
     set data(val) {
-
+        console.log(val);
     }
     render() {
         this.style.setProperty('--boardHeight', this.height+'px');
