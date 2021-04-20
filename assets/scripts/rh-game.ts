@@ -1,29 +1,35 @@
 export class Coord {
     x: number
     y: number
-    
+    constructor(coords:string) {
+       [this.x,this.y] = coords.split(',').map(i=>parseInt(i)); 
+    }
 }
+
+
 
 export class Cell {
 
 }
 
 export class Ship {
-    origin: Array<
+    
 }
 
 export class Player {
     username: string;
     uuid: string;
     human: boolean;
-    board: Map<string, Ship>
 }
 
 export class Turn {
-
+    destroyed: boolean;
+    hit: boolean;
+    origin: Coord;
+    attacker: string;
 }
 
-export class Game {
+export class Match {
     gameId: string;
     matchId: string;
     playerA: Player;

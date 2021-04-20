@@ -11,12 +11,14 @@
 :root {
     --fontFamily: 'dogica', sans-serif;
     
-    --heading1FontSize: 24px;
-    --heading1Margin: 0 0 16px;
-    --heading2FontSize: 20px;
-    --heading2Margin: 20px 0;
-    --listMarginBottom: 10px;
-    --listFontSize: 18px;
+    --heading1FontSize: 22px;
+    --heading1Margin: 0 0 10px;
+    --heading1LineHeight: 32px;
+    --heading2FontSize: 18px;
+    --heading2Margin: 14px 0;
+    --listMarginBottom: 2px;
+    --listFontSize: 14px;
+    --listLineHeight: 1.5;
 
     --green : #7ac49e;
     --dark-green: #161c01;
@@ -40,15 +42,18 @@ body {
 
 article {
     margin: 0 auto;
-    width: 1100px;
-    height: 460px;
-    display: grid;
-    grid-gap: 48px;
-    grid-template-columns: 1fr 1fr;
+    width: 600px;
+    height: 1000px;
     padding: 50px 65px 150px 65px;
-    background: url('/img/dashboard-bg.png') no-repeat;
-    background-size: contain;
+ }
+article.game { 
+    grid-area: game;
+    width: 480px;
 }
+iframe {
+    border: none;
+}
+article.replay { grid-area: replay; border: 2px solid white}
 
 section {
     padding: 1em;

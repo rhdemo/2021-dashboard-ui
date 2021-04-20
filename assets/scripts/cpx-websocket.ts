@@ -25,19 +25,6 @@ export class CPXWebSocket extends HTMLElement {
         this._data = val;
         this.render();
     }
-    
-    // get cssStyles() {
-    //     let css = document.createElement('style');
-    //     css.type = 'text/css';
-    //     let styles = `
-    //         :host {
-    //             display:block;
-    //         }
-    //     `;
-    //     if (css.styleSheet) css.styleSheet.cssText = styles;
-    //     else css.appendChild(document.createTextNode(styles))
-    //     return css;
-    // }
 
     constructor(url:string) {
         super();
@@ -128,31 +115,6 @@ export class CPXWebSocket extends HTMLElement {
             } 
             this.renderTemplate(this.data, this.shadowRoot);
             
-            /*
-            let tmplKeys = this.template.content.querySelectorAll('[data-key]');
-            tmplKeys.forEach(el => {
-                //console.log(this.data[el.getAttribute('data-key')]);
-                el.innerHTML = el.innerHTML.replace(/\${([^{]+[^}])}/g, this.data[el.getAttribute('data-key')]||'');
-            });
-            */
-            // let tmplRepeats = this.template.content.querySelectorAll('[data-repeat]');
-            // tmplRepeats.forEach(el => {
-            //     let attr = el.getAttribute('data-repeat');
-            //     let scope = attr === 'data' ? this.data : this.data[attr];
-            //     let items = el.innerHTML.match(/\${[^{]+[^}]}/g);
-            //     if(items && items.length > 0) {
-            //         let html = el.outerHTML;
-            //         let result = '';
-            //         for(let i=0; i<scope.length; i++) {
-            //             result = `${result}
-            //             ${items.reduce((a,c) => {
-            //                 //console.log(`Reduce: ${a},${c},${scope[i][c.replace(/[\$\{\}]/g,'')]}`);
-            //                 return a.replace(c,scope[i][c.replace(/[\$\{\}]/g,'')]);
-            //             },html)}`;
-            //         }
-            //         el.parentNode.innerHTML = result;
-            //     }
-            // });
             if (!this.shadowRoot.firstChild) {
                 //while (this.shadowRoot.firstChild) { this.shadowRoot.removeChild(this.shadowRoot.firstChild); }
                 this.shadowRoot.appendChild(this.template.content.cloneNode(true));

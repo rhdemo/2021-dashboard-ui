@@ -1,4 +1,4 @@
-FROM quay.io/ldary/deno
+FROM quay.io/ldary/deno:1.9.0
 RUN mkdir -p /var/www/assets && mkdir -p /var/www/src
 WORKDIR /var/www
 COPY assets /var/www/assets/
