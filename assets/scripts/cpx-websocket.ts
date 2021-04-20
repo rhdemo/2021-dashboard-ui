@@ -69,7 +69,8 @@ export class CPXWebSocket extends HTMLElement {
             });
         }
         this.template.innerHTML = this.template.innerHTML.replaceAll(/\${([^{]+[^}])}/g,'<var data-val="$1"></var>');
-    }
+	this.dispatchEvent(new CustomEvent('cpx-socket-ready',{ bubbles:true,composed:true}));    
+	}
 
     renderTemplate(data, ele?) {
         let eltmpl;
