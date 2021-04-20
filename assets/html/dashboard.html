@@ -220,7 +220,7 @@
                             to { width: 100% }
                         }
                     </style>
-                    <h1>Game Data</h1>
+                    <h1 data-attr="game-state">Game Data</h1>
                     <ul>
                         <li><span>Players</span><span>${human-active}</span></li>
                         <li><span>Games started</span><span>${games-played}</span></li>
@@ -231,13 +231,13 @@
                     </ul>
                     <h2>Humans</h2>
                     <ul>
-                        <li><span>Total shots</span><span>${human-shots}</span></li>
-                        <li><span>Total hits</span><span>${human-hits}</span></li>
+                        <li><span>Total hits/shots</span><span>${human-hits}/${human-shots}</span></li>
+                        <li><span>Total sunk</span><span>${human-sunk}</span></li>
                     </ul>
                     <h2>Artificial intelligence</h2>
                     <ul>
-                        <li><span>Total shots</span><span>${ai-shots}</span></li>
-                        <li><span>Total hits</span><span>${ai-hits}</span></li>
+                        <li><span>Total hits/shots</span><span>${ai-hits}/${ai-shots}</span></li>
+                        <li><span>Total sunk</span><span>${ai-sunk}</span></li>
                     </ul>
                     <!-- <h2>Ships</h2>
                     <ul>
@@ -381,16 +381,51 @@
         </cpx-websocket>
 
     </article>
-    <!-- <script type="module" src="/scripts/cpx-websocket.js"></script> -->
+    <article id="replay">
+        <rh-battleship id="game-c538ddcce22a3a58" width="250" height="250" frame="0"></rh-battleship>
+        <input id="frame" value="0" type="number" min="0" step="1" onchange="e=> document.querySelector('rh-battleship').setAttribute('frame',e.target.value);">
+        <script src="/scripts/rh-battleship.js"></script>
+        <script>
+            let gameData = [];
+            let board = document.querySelector('rh-battleship');
+            let frame = document.getElementById('frame');
+            board.data = gameData;
+            frame.addEventListener('change', e => {
+                console.log("Changed:",e.target.value);
+                board.frame = e.target.value;
+                board.render();
+            }); 
+            board.frame = frame.value;
+
+            
+        </script>
+    </article>
+    <script type="module" src="/scripts/cpx-websocket.js"></script>
     <script>
+        let targetNode = document.querySelector('[data-attr="game-state"]');
+        let mutConfig = {attributes:true};
+        const callback = (mutationList, observer) {
+            for(const mutation of mutationList) {
+                if (mutation.type === 'attributes') {
+                    console.log(mutation.attributeName,"attribute was updated.")
+                }
+            }
+        }
+
+        const observer = new MutationObserver(callback);
+        observer.observe(targetNode,mutConfig);
+    </script>
+<!-- <script>
         let playerIds = 'm5uP1_gDVjkLmos_ucfsI,Lj_JJhCV-1hawylwnkXX-,uRxtB88TFIHEZIdKvlDPu,EwRcVU-MsmtG83EsuAbOC,KOlLQmUfmeN1dTP95Y4KR,JEbqy-4uyrAVW-twrGkPY,VPIbwivUmxdMJP3oaWNxx,_IV7Rj3K7O-zazR_ZKAMC,88shuFVAyCUQDSD_LryvI,jJ_7_sgTeNhCVrpRXN4xT';
+        let players = {players: playerIds};
         fetch('/replay', {
             method: 'POST',
-            body: JSON.stringify({players:playerIds})
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(players)
         })
         .then(resp=>resp.json())
         .then(data=>console.log(data))
         .catch(e=>console.error('Error:',e));
-    </script>
+    </script> -->
 </body>
 </html>

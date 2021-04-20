@@ -94,8 +94,12 @@ export class CPXWebSocket extends HTMLElement {
                         els.forEach(el=> {
                             el.innerHTML = v;
                         });
-                    } else {
-
+                    } 
+                    let attrNodes = ele.querySelectorAll(`[data-attr=${k}]`);
+                    if (attrNodes.length !== 0) {
+                        attrNodes.forEach(n=> {
+                            n.setAttribute(`data-${k}`,v.toString());
+                        });
                     }
                     //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
                     break;

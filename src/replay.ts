@@ -38,18 +38,36 @@ const replayUrl = 'ks-matches-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshif
 const gameUrl = 'ks-players-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com';
 
 export class ReplayResource extends Drash.Http.Resource {
-    static paths = ["http://localhost:8000/replay","/replay/:id"];
+    static paths = ["/replay","/replay/:id"];
+    public GET() {
+        this.response.headers.set("Content-Type","application/json");
+        this.response.body = JSON.stringify(['test','test1']);
+        return this.response;
+    }
     public async POST() {
         let replayData: Promise<Match>[] = [];
         let playerMatches: string[] = [];
         const playerIds = this.request.getBodyParam("players");
-        console.log("Players:", this.request.getAllBodyParams());
         if (!playerIds) { throw new Drash.Exceptions.HttpException(400, "replay requires a players body parameter")}
         else {
             const gameId = await fetch(`https://${gameUrl}/game`).then(res=>res.json()).then(data=>data['gameId']);
-            String(playerIds).split(',').map(async playerId=>playerMatches.push(await fetch(`https://${gameUrl}/game/${gameId}/player-matches/${playerId}`).then(res=>res.json()).then(data=>data['matches'][0])));
+            console.log('GameID:',gameId);
+            String(playerIds).split(',').map(async playerId=> {
+                let match = await fetch(`https://${gameUrl}/game/${gameId}/player-matches/${playerId}`)
+                .then(res=> {
+                    console.log('MatchResult:',res);
+                    return res.json()
+                })
+                .then(data=> {
+                    console.log('MatchData:',data);
+                    return data['matches'][0];
+                });
+                playerMatches.push(match);
+            });
             replayData = playerMatches.map(async (match: string):Promise<Match> => {
-                let matchRecord = await fetch(`https://${replayUrl}/games/${gameId}/matches/${match}`).then(res=>res.json());
+                let matchUrl = `https://${replayUrl}/games/${gameId}/matches/${match}`;
+                console.log('MatchURl:',matchUrl);
+                let matchRecord = await fetch(matchUrl).then(res=>res.json());
                 return matchRecord;
             });
             //const matches = await fetch(`https://${gameUrl}/game/${gameId}/player-matches/${playerId}`).then(res=>res.json()).then(data=>data['matches'][0]);
