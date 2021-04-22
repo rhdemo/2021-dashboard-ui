@@ -8,6 +8,14 @@ export class CPXWebSocket extends HTMLElement {
         this._url = val;
         this.setAttribute('url',this._url);
     }
+    _ready:boolean;
+    get ready() { return this._ready; }
+    set ready(val) {
+        if (this._ready === val) return;
+	this._ready = val;
+	this.setAttribute('ready',this._ready.toString());
+	this.dispatchEvent(new CustomEvent('cpx-socket-ready',{ bubbles:true,composed:true}));
+	}
 
     get state() { return ['connecting','open','closing','closed'][this.socket.readyState]}
 
@@ -69,7 +77,6 @@ export class CPXWebSocket extends HTMLElement {
             });
         }
         this.template.innerHTML = this.template.innerHTML.replaceAll(/\${([^{]+[^}])}/g,'<var data-val="$1"></var>');
-	this.dispatchEvent(new CustomEvent('cpx-socket-ready',{ bubbles:true,composed:true}));    
 	}
 
     renderTemplate(data, ele?) {
@@ -78,6 +85,8 @@ export class CPXWebSocket extends HTMLElement {
             eltmpl = ele.getAttribute('data-repeat');
         }
         data.forEach((v,k)=> {
+            let els = isNaN(k) ? ele.querySelectorAll(`var[data-val=${k}]`) : [];
+            let attrNodes = isNaN(k) ? ele.querySelectorAll(`[data-attr=${k}]`):[];
             switch (typeof v) {
                 case 'object':
                     if (eltmpl) {
@@ -90,16 +99,16 @@ export class CPXWebSocket extends HTMLElement {
                     break;
                 default:
                     // See if any instances of the string exist
-                    let els = ele.querySelectorAll(`var[data-val=${k}]`);
                     if (els.length !== 0) {
                         els.forEach(el=> {
                             el.innerHTML = v;
                         });
                     } 
-                    let attrNodes = ele.querySelectorAll(`[data-attr=${k}]`);
                     if (attrNodes.length !== 0) {
                         attrNodes.forEach(n=> {
-                            n.setAttribute(`data-${k}`,v.toString());
+                            if (n.getAttribute(`data-${k}`) !== v.toString()) {
+                                n.setAttribute(`data-${k}`,v.toString());
+                            }
                         });
                     }
                     //this.template.innerHTML = this.template.innerHTML.replaceAll('${'+k+'}',v);
@@ -122,7 +131,8 @@ export class CPXWebSocket extends HTMLElement {
             
             if (!this.shadowRoot.firstChild) {
                 //while (this.shadowRoot.firstChild) { this.shadowRoot.removeChild(this.shadowRoot.firstChild); }
-                this.shadowRoot.appendChild(this.template.content.cloneNode(true));
+		this.shadowRoot.appendChild(this.template.content.cloneNode(true));
+		this.ready = true;
             }
             
         }
@@ -148,7 +158,7 @@ export class CPXWebSocket extends HTMLElement {
     logMessage(e) {
         const message = JSON.parse(e.data);
         const msgData = new Map<string, any>(Object.entries(message));
-        if (message.length) { msgData.set('length',message.length); }
+        if (typeof message.length === 'number') { msgData.set('length',message.length); }
         this.data = msgData;
         //console.log(e.data);
     }

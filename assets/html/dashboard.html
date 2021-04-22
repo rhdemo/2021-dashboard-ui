@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <article class="vertical">
+    <article id="dashboard">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 666.66 1050.75">
             <defs>
                 <style>
@@ -130,11 +130,12 @@
                                 list-style: none;
                                 padding: 0;
                                 font-size: var(--listFontSize);
+                                margin: var(--listMargin);
                             }
                             li {
-                                margin-bottom: var(--listMarginBottom);
+                                margin-bottom: var(--listItemMarginBottom);
                                 color: var(--green);
-                                line-height: var(--listLineHeight);
+                                line-height: var(--listItemLineHeight);
                                 text-shadow: 2px 2px 0 var(--dark-green);
                                 display: flex;
                                 justify-content: space-between;
@@ -162,9 +163,9 @@
                                 to { width: 100% }
                             }
                         </style>
-                        <h1><a href="/replay">Top ${length} Players</a></h1>
+                        <h1>Top ${length} Players</h1>
                         <ol data-repeat>
-                            <li data-playerId="${userId}"><span><a href="/replay/${userId}">${userName}</a></span><span>${score}</span></li>
+                            <li data-playerId="${userId}"><span>${userName}</span><span>${score}</span></li>
                         </ol>
                     </template>
                 </cpx-websocket>
@@ -196,12 +197,13 @@
                             list-style: none;
                             padding: 0;
                             font-size: var(--listFontSize);
+                            margin: var(--listMargin);
                         }
                         li {
-                            margin-bottom: var(--listMarginBottom);
+                            margin-bottom: var(--listItemMarginBottom);
                             color: var(--green);
                             text-shadow: 2px 2px 0 var(--dark-green);
-                            line-height: var(--listLineHeight);
+                            line-height: var(--listItemLineHeight);
                             display: flex;
                             justify-content: space-between;
                         } 
@@ -253,8 +255,9 @@
             </foreignObject>
             <rect class="greenrect" x="67.6" y="871.22" width="531.52" height="117.67" fill="url(#screen)"></rect>
             <foreignObject x="80.6" y="871.22" width="505.52" height="117.67">
-                <div>
-
+                <div id="status">
+                    <strong>**CLAIM YOUR PRIZE**</strong>
+                    <p>Winners can claim their prize on the Game Over screen.</p>
                 </div>
             </foreignObject>
             <rect class="cls-4" x="16.54" y="644.5" width="1.82" height="168.5"/>
@@ -381,54 +384,9 @@
         </cpx-websocket>
 
     </article>
-    <article id="replay">
-	<!--<rh-battleship id="game-c538ddcce22a3a58" width="250" height="250" frame="0"></rh-battleship>
-        <input id="frame" value="0" type="number" min="0" step="1" onchange="e=> document.querySelector('rh-battleship').setAttribute('frame',e.target.value);">
-        <script src="/scripts/rh-battleship.js"></script>
-        <script>
-            let gameData = [];
-            let board = document.querySelector('rh-battleship');
-            let frame = document.getElementById('frame');
-            board.data = gameData;
-            frame.addEventListener('change', e => {
-                console.log("Changed:",e.target.value);
-                board.frame = e.target.value;
-                board.render();
-            }); 
-            board.frame = frame.value;
-
-            
-	</script>-->
+    <article id="replay" class="hidden">
     </article>
     <script type="module" src="/scripts/cpx-websocket.js"></script>
-    <script>
-	    document.addEventListener('cpx-socket-ready', e=>{
-		    if (e.target.id==='stats') {
-        let targetNode = e.target.shadowRoot.querySelector('[data-attr="game-state"]');
-        let mutConfig = {attributes:true};
-const callback = (mutationList, observer) => {
-            for(const mutation of mutationList) {
-                if (mutation.type === 'attributes') {
-                    console.log(mutation.attributeName,"attribute was updated.");
-                }
-            }
-        };
-
-        const observer = new MutationObserver(callback);
-        observer.observe(targetNode,mutConfig);
-		    }
-    </script>
-<!-- <script>
-        let playerIds = 'm5uP1_gDVjkLmos_ucfsI,Lj_JJhCV-1hawylwnkXX-,uRxtB88TFIHEZIdKvlDPu,EwRcVU-MsmtG83EsuAbOC,KOlLQmUfmeN1dTP95Y4KR,JEbqy-4uyrAVW-twrGkPY,VPIbwivUmxdMJP3oaWNxx,_IV7Rj3K7O-zazR_ZKAMC,88shuFVAyCUQDSD_LryvI,jJ_7_sgTeNhCVrpRXN4xT';
-        let players = {players: playerIds};
-        fetch('/replay', {
-            method: 'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify(players)
-        })
-        .then(resp=>resp.json())
-        .then(data=>console.log(data))
-        .catch(e=>console.error('Error:',e));
-    </script> -->
+    <script src="/scripts/dashboard.js"></script>
 </body>
 </html>

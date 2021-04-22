@@ -11,14 +11,16 @@
 :root {
     --fontFamily: 'dogica', sans-serif;
     
-    --heading1FontSize: 22px;
-    --heading1Margin: 0 0 10px;
-    --heading1LineHeight: 32px;
+    --heading1FontSize: 20px;
+    --heading1Margin: 0;
+    --heading1LineHeight: 28px;
     --heading2FontSize: 18px;
-    --heading2Margin: 14px 0;
-    --listMarginBottom: 2px;
-    --listFontSize: 14px;
-    --listLineHeight: 1.5;
+    --heading2Margin: 12px 0 10px;
+
+    --listMargin: 0;
+    --listFontSize: 16px;
+    --listItemMarginBottom: 2px;
+    --listItemLineHeight: 1.5;
 
     --green : #7ac49e;
     --dark-green: #161c01;
@@ -35,9 +37,42 @@
 
 
 body {
+    position: relative;
     font-family: var(--fontFamily);
     display: grid;
     background: var(--ocean);
+    overflow: hidden;
+}
+
+body::before {
+    z-index: -1;
+    position:absolute;
+    content: '';
+    width:100vw;
+    height: 100vh;
+    background: url(/img/water-bg.svg) 0;
+    animation: water-xl 5s linear infinite alternate;
+}
+
+div#status {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto;
+    justify-content: center;
+    align-items: center;    
+    color: white;
+    font-family: var(--fontFamily);
+    font-size: 1em;
+    text-shadow: 2px 2px 0 var(--dark-green);
+    text-align: center;
+}
+div#status strong {
+    font-size: 1.2em;
+    align-self:flex-end;
+}
+div#status p {
+    line-height: 1.5;
+    margin:0;
 }
 
 article {
@@ -45,15 +80,17 @@ article {
     width: 600px;
     height: 1000px;
     padding: 50px 65px 150px 65px;
+    animation: 1s ease-in blipIn;
  }
-article.game { 
-    grid-area: game;
-    width: 480px;
+
+article#replay { border: 2px solid white}
+
+.hidden {
+    display:none;
+    transform: scaleY(0);
+    animation: 1s ease-out blipOut;
 }
-iframe {
-    border: none;
-}
-article.replay { grid-area: replay; border: 2px solid white}
+
 
 section {
     padding: 1em;
@@ -62,4 +99,27 @@ section {
 }
 #leaders {
 
+}
+
+@keyframes water-xl {
+    0% { transform:translate(10px, 0); }
+    100% {  transform:translate(-10px, 0); }
+  }
+
+@keyframes blipIn {
+    from {
+        transform: scaleY(0);
+    }
+    to {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes blipOut {
+    from {
+        transform: scaleY(1);
+    }
+    to {
+        transform: scaleY(0);
+    }
 }
