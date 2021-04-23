@@ -9,16 +9,23 @@ class Coord {
 }
 
 type Turn = {
-    destroyed: boolean;
-    hit: boolean;
-    origin: Coord;
-    attacker: string;
+    hit?: boolean;
+    origin: number[];
+}
+
+type TurnRes = {
+    hit?: boolean;
+    origin: string;
 }
 
 type Player = {
+    userId: string;
     username: string;
-    uuid: string;
+    gameId: string;
     human: boolean;
+    score: number;
+    bonus: number;
+    matchId: string;
 }
 
 type Match = {
@@ -32,56 +39,4363 @@ type Match = {
     endTs: number;
 }
 
-const replayUrl = 'https://ks-matches-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com/';
-const gameUrl = 'https://ks-players-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com/';
-const rankingUrl = 'http://scoring-service-battleships-scoring.apps.summit-gcp.eior.p2.openshiftapps.com/scoring/';
+const data = {
+    "turns": [
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,2",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "2,2",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "2,1",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Destroyer",
+            "hit": true,
+            "origin": "2,2",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "2,3",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,1",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Battleship",
+            "hit": true,
+            "origin": "2,0",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,2",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,3",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,4",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,2",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Carrier",
+            "hit": true,
+            "origin": "4,0",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,1",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "0,3",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,0",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "0,2",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,3",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "0,1",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Carrier",
+            "hit": true,
+            "origin": "1,4",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "3,0",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Battleship",
+            "hit": true,
+            "origin": "0,0",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Destroyer",
+            "hit": true,
+            "origin": "4,0",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "2,4",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,4",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "1,4",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": null,
+            "hit": true,
+            "origin": "4,2",
+            "attacker": "M86rLakfzWNRUXKatRVQq",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        1,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        2,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        4,
+                        2
+                    ],
+                    "orientation": "vertical",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": false,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        3,
+                        0
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                3,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "destroyed": "Submarine",
+            "hit": true,
+            "origin": "3,4",
+            "attacker": "b2pKNXzDiu9-8tREtv_XB",
+            "updatedBoard": {
+                "Carrier": {
+                    "origin": [
+                        4,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Carrier",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                0
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                1
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                2
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                3
+                            ],
+                            "type": "Carrier"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                4,
+                                4
+                            ],
+                            "type": "Carrier"
+                        }
+                    ]
+                },
+                "Battleship": {
+                    "origin": [
+                        0,
+                        0
+                    ],
+                    "orientation": "vertical",
+                    "type": "Battleship",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                0
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                1
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                2
+                            ],
+                            "type": "Battleship"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                0,
+                                3
+                            ],
+                            "type": "Battleship"
+                        }
+                    ]
+                },
+                "Submarine": {
+                    "origin": [
+                        1,
+                        4
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Submarine",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                4
+                            ],
+                            "type": "Submarine"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                3,
+                                4
+                            ],
+                            "type": "Submarine"
+                        }
+                    ]
+                },
+                "Destroyer": {
+                    "origin": [
+                        1,
+                        2
+                    ],
+                    "orientation": "horizontal",
+                    "type": "Destroyer",
+                    "cells": [
+                        {
+                            "hit": true,
+                            "origin": [
+                                1,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        },
+                        {
+                            "hit": true,
+                            "origin": [
+                                2,
+                                2
+                            ],
+                            "type": "Destroyer"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+};
 
-// const replayUrl = Deno.env.get("REPLAY_SERVER");
-// const gameUrl = Deno.env.get("GAME_SERVER");
-// const rankingUrl = Deno.env.get("RANK_SERVER");
+// const replayUrl = 'ks-matches-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com';
+// const rankingUrl = 'scoring-service-battleships-scoring.apps.summit-gcp.eior.p2.openshiftapps.com';
+
+const replayUrl = Deno.env.get("REPLAY_SERVER");
+const rankingUrl = Deno.env.get("RANK_SERVER");
 
 export class ReplayResource extends Drash.Http.Resource {
-    static paths = ["/replay","/replay/:id"];
-    public GET() {
+    static paths = ["/replay/:gameId"];
+    public async GET() {
         this.response.headers.set("Content-Type","application/json");
-        this.response.body = JSON.stringify(['test','test1']);
-        return this.response;
-    }
-    public POST() {
-        let rankData: string[] = []
-        let replayData: Promise<Match>[] = [];
-        let playerMatches: string[] = [];
-        const playerIds = this.request.getBodyParam("players");
-        if (!playerIds) { throw new Drash.Exceptions.HttpException(400, "replay requires a players body parameter")}
+        const gameId = this.request.getPathParam("gameId");
+        let rankData: Player[] = [];
+        let replayData: Array<Turn[]> = [];
+        if (!gameId) { throw new Drash.Exceptions.HttpException(400, "replay requires a gameID")}
         else {
-            const gameId = 'c1a88af1716e2173'; //await fetch(`https://${gameUrl}/game`).then(res=>res.json()).then(data=>data['gameId']);
-            console.log('GameID:',gameId);
-            const rankData = [{"userId":"c1l7ldEjTThwn3o1Nf5gb","matchId":"cH1aWFl9PnZI9gqO3966o","gameId":"c1a88af1716e2173","username":"Pyrite Moose","human":true,"score":839,"timestamp":1619112810141,"gameStatus":"WIN","bonus":69},{"userId":"G_mBfkpWP-o1_UOQ2_Vxl","matchId":"VPidbgYpRwFaXYJRI5oWo","gameId":"c1a88af1716e2173","username":"Sand Ninja","human":true,"score":490,"timestamp":1619113327130,"gameStatus":"PLAYING","bonus":60},{"userId":"Xn8uadCMCBgTagESqm7hE","matchId":"YPiaxFpyuSd0blJAOE4g9","gameId":"c1a88af1716e2173","username":"Holly Arrow","human":true,"score":245,"timestamp":1619110464644,"gameStatus":"PLAYING","bonus":20},{"userId":"oON3AOVaise0MtnLsXcE9","matchId":"-RZ4IcnU2_w0Rv1gFevQ9","gameId":"c1a88af1716e2173","username":"Fantasy Wyrm","human":true,"score":237,"timestamp":1619110497269,"gameStatus":"PLAYING","bonus":7},{"userId":"c1l7ldEjTThwn3o1Nf5gb","matchId":"XRIhcuLM_2IXv95a40eX4","gameId":"c1a88af1716e2173","username":"Pyrite Moose","human":true,"score":193,"timestamp":1619113068188,"gameStatus":"PLAYING","bonus":28},{"userId":"WVrj-Vfrf-93OnD2v5zD1","matchId":"7xFYjtLXtgcPc4rhx9Dc-","gameId":"c1a88af1716e2173","username":"Frill Flasher","human":true,"score":145,"timestamp":1619110460237,"gameStatus":"PLAYING","bonus":20}]; //await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=100`).then(res=>res.json());
-            String(playerIds).split(',').map(async playerId=> {
-                let match = await fetch(`https://${gameUrl}/game/${gameId}/player-matches/${playerId}`)
-                .then(res=> {
-                    console.log('MatchResult:',res);
-                    return res.json()
-                })
-                .then(data=> {
-                    console.log('MatchData:',data);
-                    return data['matches'][0];
-                });
-                playerMatches.push(match);
+            rankData = await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=10`).then(res=>res.json());
+            rankData.forEach(async (player:Player) => {
+
+                let matchUrl = `https://${replayUrl}/games/${player.gameId}/matches/${player.matchId}`;
+                let data = await fetch(matchUrl).then(res=>res.json());
+                let matchData:Turn[] = data.turns.reduce((a:Turn[],c:TurnRes)=> {
+                    let origin = new Coord(c.origin);
+                    a.push({
+                        hit: c.hit,
+                        origin: [origin.x,origin.y]
+                    });
+                    return a;
+                },[] as Turn[]);
+                replayData.push(matchData);
             });
-            replayData = playerMatches.map(async (match: string):Promise<Match> => {
-                let matchUrl = `https://${replayUrl}/games/${gameId}/matches/${match}`;
-                console.log('MatchURl:',matchUrl);
-                let matchRecord = await fetch(matchUrl).then(res=>res.json());
-                return matchRecord;
-            });
-            //const matches = await fetch(`https://${gameUrl}/game/${gameId}/player-matches/${playerId}`).then(res=>res.json()).then(data=>data['matches'][0]);
-            this.response.headers.set("Content-Type","application/json");
-            this.response.body = JSON.stringify(
-                {
-                    replayData: JSON.stringify(replayData)
-                }
-            )
+
+            this.response.body = replayData
 
             return this.response;
         }

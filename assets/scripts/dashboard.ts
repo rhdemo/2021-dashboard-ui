@@ -1,27 +1,34 @@
 document.addEventListener('cpx-socket-ready', e=>{
 	if (e.target.id==='stats') {
-		let status = document.querySelector('#status');
-        let targetNode = e.target.shadowRoot.querySelector('[data-attr="game-state"]');
+		let dashboard = document.querySelector('#dashboard');
+		let replay = document.querySelector('#replay');
+        let targetDoc = e.target.shadowRoot;
+		let gameState =  targetDoc.querySelector('[data-attr="game-state"]');
+		let gameId;
         let mutConfig = {attributes:true};
 		const callback = (mutationList, observer) => {
             for(const mutation of mutationList) {
                 if (mutation.type === 'attributes') {
 					switch (mutation.target.getAttribute('data-game-state')) {
 						case 'replay':
-							status.innerHTML = "REPLAY";
-							console.log('Replay Active');
+							gameId = targetDoc.querySelector('[data-attr="game-id"]').getAttribute('data-game-id');
+							dashboard.className = 'hidden';
+							replay.className = '';
+							fetch(`/replay/${gameId}`)
+								.then(resp=>resp.json())
+								.then(data=>console.log(data));
 						break;
 						case 'lobby':
-							status.innerHTML = "LOBBY";
-							console.log('Lobby Active');
+							dashboard.className = '';
+							replay.className = 'hidden';
 							break;
 						case 'paused':
-							status.innerHTML = "PAUSED";
-							console.log('Game Paused');
+							dashboard.className = '';
+							replay.className = 'hidden';
 							break;
 						default:
-							status.innerHTML = "GAME ON!";
-							console.log('Game Active');
+							dashboard.className = '';
+							replay.className = 'hidden';
 							break;
 					}
                 }
@@ -29,6 +36,6 @@ document.addEventListener('cpx-socket-ready', e=>{
         };
 
         const observer = new MutationObserver(callback);
-		observer.observe(targetNode,mutConfig);
+		observer.observe(gameState,mutConfig);
 	}
 });

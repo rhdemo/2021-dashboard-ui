@@ -42,6 +42,10 @@ body {
     display: grid;
     background: var(--ocean);
     overflow: hidden;
+    height: 100vh;
+    margin:0;
+    grid-template-rows: auto;
+    align-items: center;
 }
 
 body::before {
@@ -78,9 +82,7 @@ div#status p {
 article {
     margin: 0 auto;
     width: 600px;
-    height: 1000px;
-    padding: 50px 65px 150px 65px;
-    animation: 1s ease-in blipIn;
+    animation: .5s ease-in blipIn;
  }
 
 article#replay { border: 2px solid white}
@@ -88,7 +90,7 @@ article#replay { border: 2px solid white}
 .hidden {
     display:none;
     transform: scaleY(0);
-    animation: 1s ease-out blipOut;
+    animation: .5s ease-out blipOut;
 }
 
 
