@@ -85,7 +85,7 @@ article {
     animation: .5s ease-in blipIn;
  }
 
-article#replay { border: 2px solid white}
+article#replay { }
 
 .hidden {
     display:none;
