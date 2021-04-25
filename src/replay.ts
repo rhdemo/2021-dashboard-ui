@@ -33,13 +33,13 @@ type Match = {
     matchId: string;
     playerA: Player;
     playerB: Player;
-    turns: Turn[];
+    turns: TurnRes[];
     winner: string;
     startTs: number;
     endTs: number;
 }
 
-const replayUrl = 'matches-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com';
+const replayUrl = 'streams-replay-tracker-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com';
 const rankingUrl = 'scoring-service-battleships-scoring.apps.summit-gcp.eior.p2.openshiftapps.com';
 
 // const replayUrl = Deno.env.get("REPLAY_SERVER");
@@ -49,35 +49,30 @@ export class ReplayResource extends Drash.Http.Resource {
     static paths = ["/replay/:gameId"];
     public async GET() {
         const gameId = this.request.getPathParam("gameId");
-        let rankData: Player[] = [];
-        let replayData: Promise<Turn[]>[] = [];
+        //let rankData: Player[] = [];
+        let replayData: Turn[][] = [];
         if (!gameId) { throw new Drash.Exceptions.HttpException(400, "replay requires a gameID")}
         else {
-            rankData = await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=10`).then(res=>res.json()).catch(e=>[]);
-            replayData = await rankData.map(async (player:Player) : Promise<Turn[]> => {
-                let matchUrl = `https://${replayUrl}/games/${player.gameId}/matches/${player.matchId}`;
-                let matchData:Turn[] = [];
-                let data = await fetch(matchUrl).then(res=>res.json()).catch(e=>{turns:[]});
-                if (data) {
-                    matchData = data.turns.reduce((a:Turn[],c:TurnRes) : Turn[]=> {
-                        let origin = new Coord(c.origin);
-                        a.push({
-                            hit: c.hit,
-                            origin: [origin.x,origin.y]
-                        });
-                        return a;
-                    },[] as Turn[]);
-                }
-                return matchData;
-            });
-            this.response.headers.set("Content-Type","application/json");
-            //this.response.body = replayData;
-            this.response.body = await rankData.map(async (player:Player) : Promise<Match> => {
-                return await fetch(`https://${replayUrl}/games/${player.gameId}/matches/${player.matchId}`)
-                    .then(resp=>resp.json()).then((data:Match)=>data);
+            // rankData = await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=10`).then(res=>res.json()).catch(e=>[]);
+            replayData = await fetch(`https://${replayUrl}/game/${gameId}/replays`).then(res=>res.json()).then((matches:Match[]) => {
+                return matches.map((match:Match) : Turn[] => {
+                    console.log('Turns:',match.turns.length);
+                    return match.turns.map((turn:TurnRes) : Turn => {
+                        let origin = new Coord(turn.origin);
+                        return { hit: turn.hit, origin: [origin.x,origin.y]};
+                    })
+                })
             });
 
+            this.response.headers.set("Content-Type","application/json");
+            this.response.body = replayData;
             return this.response;
+            
         }
     }
+}
+
+const getReplayData = async (rankData: Player[], replayData: Promise<Turn[]>[]) => {
+    
+    return replayData;
 }
