@@ -54,10 +54,8 @@ export class ReplayResource extends Drash.Http.Resource {
         if (!gameId) { throw new Drash.Exceptions.HttpException(400, "replay requires a gameID")}
         else {
             // rankData = await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=10`).then(res=>res.json()).catch(e=>[]);
-            console.log(`https://${replayUrl}/game/${gameId}/replays`);
             replayData = await fetch(`https://${replayUrl}/game/${gameId}/replays`).then(res=>res.json()).then((matches:Match[]) => {
                 return matches.map((match:Match) : Turn[] => {
-                    console.log('Turns:',match.turns.length);
                     return match.turns.map((turn:TurnRes) : Turn => {
                         let origin = new Coord(turn.origin);
                         return { hit: turn.hit, origin: [origin.x,origin.y]};

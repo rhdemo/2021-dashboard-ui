@@ -46,6 +46,7 @@ body {
     margin:0;
     grid-template-rows: auto;
     align-items: center;
+    justify-items: center;
 }
 
 body::before {
@@ -80,12 +81,22 @@ div#status p {
 }
 
 article {
-    margin: 0 auto;
-    width: 600px;
     animation: .5s ease-in blipIn;
  }
 
-article#replay { }
+article#dashboard svg { width: 600px; }
+
+article#replay {
+    display: grid;
+    grid-template-columns: repeat(10,1fr);
+    grid-gap: 1vw;
+    height: 100vh;
+    width: 98vw;
+    padding: 1vw;
+    justify-items: flex-start;
+    align-items: flex-start;
+    grid-template-rows: 226px;
+}
 
 .hidden {
     display:none;
@@ -104,8 +115,8 @@ section {
 }
 
 @keyframes water-xl {
-    0% { transform:translate(10px, 0); }
-    100% {  transform:translate(-10px, 0); }
+    0% { background-position: 0 0; }
+    100% {  background-position: 10px 0; }
   }
 
 @keyframes blipIn {

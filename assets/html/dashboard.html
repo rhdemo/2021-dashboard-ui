@@ -385,35 +385,9 @@
 
     </article>
     <article id="replay" class="hidden">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-        width="200" height="410">
-            <defs>
-                <style>
-                    .boardcell {
-                        fill: var(--ocean);
-                        stroke: #fff;
-                        stroke-width: 2px;
-                    }
-                    .boardcont { stroke: #fff; stroke-width: 2px;}
-                </style>
-                <pattern id="p1board" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <rect class="boardcell" width="40" height="40"></rect>
-                </pattern>
-                <pattern id="p2board" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <rect class="boardcell" width="40" height="40"></rect>
-                </pattern>
-            </defs>
-            <rect class="boardcont" x="0" y="0" width="200" height="200" fill="url(#p1board)"></rect>
-            <rect class="boardcont" x="0" y="210" width="200" height="200" fill="url(#p2board)"></rect>
-            <image x="10" y="10" width="20" height="20" xlink:href="/img/hit-peg.png"/>
-            <image x="50" y="10" width="20" height="20" xlink:href="/img/hit-peg.png"/>
-            <image x="90" y="10" width="20" height="20" xlink:href="/img/hit-peg.png"/>
-            <image x="130" y="10" width="20" height="20" xlink:href="/img/hit-peg.png"/>
-            <image x="170" y="10" width="20" height="20" xlink:href="/img/hit-peg.png"/>
-
-        </svg>
     </article>
     <script type="module" src="/scripts/cpx-websocket.js"></script>
+    <script type="module" src="/scripts/rh-replay.js"></script>
     <script src="/scripts/dashboard.js"></script>
 </body>
 </html>

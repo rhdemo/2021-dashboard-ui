@@ -16,7 +16,9 @@ document.addEventListener('cpx-socket-ready', e=>{
 							replay.className = '';
 							fetch(`/replay/${gameId}`)
 								.then(resp=>resp.json())
-								.then(data=>console.log(data));
+								.then(data=>{
+data.map(replay=>document.querySelector('#replay').appendChild(document.createElement('rh-replay')));
+})
 						break;
 						case 'lobby':
 							dashboard.className = '';
