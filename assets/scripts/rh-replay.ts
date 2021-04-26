@@ -35,25 +35,40 @@ const template = `
 	<rect class="boardcont" x="0" y="0" width="200" height="200" fill="url(#p1board)"></rect>
 	<rect class="boardcont" x="0" y="210" width="200" height="200" fill="url(#p2board)"></rect>
 	<g id="turns">
-		<image x="5" y="5" width="30" height="30" xlink:href="/img/hit-peg.png"></image>
-		<image x="45" y="45" width="30" height="30" xlink:href="/img/hit-peg.png"></image>
-		<image x="85" y="85" width="30" height="30" xlink:href="/img/miss-peg.png"></image>
-		<image x="125" y="125" width="30" height="30" xlink:href="/img/hit-peg.png"></image>
-		<image x="165" y="165" width="30" height="30" xlink:href="/img/miss-peg.png"></image>
 	</g>
 </svg>`;
 
 export class RHReplay extends HTMLElement {
-constructor() {
-super();
-this.attachShadow({mode:"open"});
-let tmpl = document.createElement('template');
-tmpl.innerHTML = template;
-this.shadowRoot.appendChild(tmpl.content.cloneNode(true));
+	turn = 0;
+	turns = [];
+	[Symbol.iterator]() {
+		return this;
+	}
+	next() {
+		if (this.turn >= this.turns.length) {
+			let turnsCont = this.shadowRoot.querySelector('#turns');
+			while (turnsCont.firstChild) { turnsCont.removeChild(turnsCont.firstChild); }
+			this.turn = 0;
+		}
+		return {
+			value: this.turns[this.turn++],
+			done: false
+		}
+	}
+	
+	constructor() {
+		super();
+		this.attachShadow({mode:"open"});
+		let tmpl = document.createElement('template');
+		tmpl.innerHTML = template;
+		this.shadowRoot.appendChild(tmpl.content.cloneNode(true));
+	}
+
+	connectedCallback() {
+		top.addEventListener('next-turn', e => {
+			console.log('Next Turn:', this.next().value);
+		});
+	}
 }
 
-connectedCallback() {
-
-}
-}
 window.customElements.define('rh-replay', RHReplay);

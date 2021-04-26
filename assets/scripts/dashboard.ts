@@ -17,8 +17,12 @@ document.addEventListener('cpx-socket-ready', e=>{
 							fetch(`/replay/${gameId}`)
 								.then(resp=>resp.json())
 								.then(data=>{
-data.map(replay=>document.querySelector('#replay').appendChild(document.createElement('rh-replay')));
-})
+									data.map(replay=> {
+										let replayNode = document.createElement('rh-replay');
+										replayNode.turns = replay;
+										document.querySelector('#replay').appendChild(replayNode);
+									});
+								});
 						break;
 						case 'lobby':
 							dashboard.className = '';
@@ -39,5 +43,15 @@ data.map(replay=>document.querySelector('#replay').appendChild(document.createEl
 
         const observer = new MutationObserver(callback);
 		observer.observe(gameState,mutConfig);
+		window.requestAnimationFrame(turnStyleFx);
 	}
 });
+
+let startTime;
+function turnStyleFx(timestamp) {
+	if (startTime === undefined) startTime = Math.floor(timestamp);
+	if ((Math.floor(timestamp) - startTime) % 2000 === 0) {
+		dispatchEvent(new CustomEvent('next-turn', { bubbles: true}));
+	} 
+	window.requestAnimationFrame(turnStyleFx);
+}

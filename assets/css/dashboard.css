@@ -88,14 +88,14 @@ article#dashboard svg { width: 600px; }
 
 article#replay {
     display: grid;
-    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(4,1fr);
     grid-gap: 1vw;
-    height: 100vh;
+    height: auto;
     width: 600px;
     padding: 1vw;
-    justify-items: flex-start;
-    align-items: flex-start;
-    grid-template-rows: repeat(5,auto);
+    justify-items: center;
+    align-items: center;
+    grid-template-rows: repeat(3,auto);
 }
 
 .hidden {
