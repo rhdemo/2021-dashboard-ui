@@ -9,11 +9,13 @@ class Coord {
 }
 
 type Turn = {
+    attacker: string;
     hit?: boolean;
     origin: number[];
 }
 
 type TurnRes = {
+    attacker: string;
     hit?: boolean;
     origin: string;
 }
@@ -39,26 +41,24 @@ type Match = {
     endTs: number;
 }
 
-const replayUrl = 'streams-replay-tracker-kafka-streams.apps.summit-aws-ue1.zch4.p1.openshiftapps.com';
-//const rankingUrl = 'scoring-service-battleships-scoring.apps.summit-gcp.eior.p2.openshiftapps.com';
-
-// const replayUrl = Deno.env.get("REPLAY_SERVER");
-// const rankingUrl = Deno.env.get("RANK_SERVER");
+const replayUrl = Deno.env.get("REPLAY_SERVER");
 
 export class ReplayResource extends Drash.Http.Resource {
     static paths = ["/replay/:gameId"];
     public async GET() {
         const gameId = this.request.getPathParam("gameId");
-        //let rankData: Player[] = [];
         let replayData: Turn[][] = [];
         if (!gameId) { throw new Drash.Exceptions.HttpException(400, "replay requires a gameID")}
         else {
-            // rankData = await fetch(`http://${rankingUrl}/scoring/${gameId}/ranking?max=10`).then(res=>res.json()).catch(e=>[]);
             replayData = await fetch(`https://${replayUrl}/game/${gameId}/replays?gimme=12`).then(res=>res.json()).then((matches:Match[]) => {
                 return matches.map((match:Match) : Turn[] => {
                     return match.turns.map((turn:TurnRes) : Turn => {
                         let origin = new Coord(turn.origin);
-                        return { hit: turn.hit, origin: [origin.x,origin.y]};
+                        return { 
+                            attacker:turn.attacker, 
+                            hit: turn.hit, 
+                            origin: [origin.x,origin.y]
+                        };
                     })
                 })
             }).catch(e=>[]);

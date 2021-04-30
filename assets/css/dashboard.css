@@ -89,13 +89,19 @@ article#dashboard svg { width: 600px; }
 article#replay {
     display: grid;
     grid-template-columns: repeat(4,1fr);
-    grid-gap: 1vw;
+    grid-gap: 3vw;
     height: auto;
     width: 600px;
     padding: 1vw;
     justify-items: center;
     align-items: center;
-    grid-template-rows: repeat(3,auto);
+    grid-template-rows: repeat(4,auto);
+}
+
+article#replay h1 {
+    grid-column: 1 / 5;
+    color: white;
+    text-shadow: 2px 2px 0 var(--dark-green);
 }
 
 .hidden {

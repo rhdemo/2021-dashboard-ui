@@ -1,7 +1,8 @@
 document.addEventListener('cpx-socket-ready', e=>{
 	if (e.target.id==='stats') {
 		let dashboard = document.querySelector('#dashboard');
-		let replay = document.querySelector('#replay');
+		let statusCont = document.querySelector('#status');
+		let replayCont = document.querySelector('#replay');
         let targetDoc = e.target.shadowRoot;
 		let gameState =  targetDoc.querySelector('[data-attr="game-state"]');
 		let gameId;
@@ -13,28 +14,47 @@ document.addEventListener('cpx-socket-ready', e=>{
 						case 'replay':
 							gameId = targetDoc.querySelector('[data-attr="game-id"]').getAttribute('data-game-id');
 							dashboard.className = 'hidden';
-							replay.className = '';
-							fetch(`/replay/${gameId}`)
+							replayCont.className = '';
+							if (!replayCont.querySelectorAll('rh-replay').length) {
+								fetch(`/replay/${gameId}`)
 								.then(resp=>resp.json())
 								.then(data=>{
 									data.map(replay=> {
 										let replayNode = document.createElement('rh-replay');
-										replayNode.turns = replay;
-										document.querySelector('#replay').appendChild(replayNode);
+										replayNode['data'] = replay;
+										replayNode['interval'] = 0.75;
+										replayNode['loop'] = false;
+										replayCont.appendChild(replayNode);
 									});
+								})
+								.then(() => {
+									dispatchEvent(new CustomEvent('start-replay', { bubbles: true}));	
 								});
+							} else {
+								dispatchEvent(new CustomEvent('start-replay', { bubbles: true}));	
+							}
 						break;
 						case 'lobby':
 							dashboard.className = '';
-							replay.className = 'hidden';
+							replayCont.className = 'hidden';
+							dispatchEvent(new CustomEvent('stop-replay', { bubbles: true}));	
 							break;
 						case 'paused':
 							dashboard.className = '';
-							replay.className = 'hidden';
+							replayCont.className = 'hidden';
+							dispatchEvent(new CustomEvent('stop-replay', { bubbles: true}));	
+							break;
+						case 'stopped':
+							dashboard.className = '';
+							replayCont.className = 'hidden';
+							statusCont.innerHTML = `<strong>** CLAIM YOUR PRIZE**</strong>
+                    		<p>Winners can claim their prize on the Game Over screen.</p>`;
+							dispatchEvent(new CustomEvent('stop-replay', { bubbles: true}));	
 							break;
 						default:
 							dashboard.className = '';
-							replay.className = 'hidden';
+							replayCont.className = 'hidden';
+							dispatchEvent(new CustomEvent('stop-replay', { bubbles: true}));	
 							break;
 					}
                 }
@@ -43,15 +63,5 @@ document.addEventListener('cpx-socket-ready', e=>{
 
         const observer = new MutationObserver(callback);
 		observer.observe(gameState,mutConfig);
-		window.requestAnimationFrame(turnStyleFx);
 	}
 });
-
-let startTime;
-function turnStyleFx(timestamp) {
-	if (startTime === undefined) startTime = Math.floor(timestamp);
-	if ((Math.floor(timestamp) - startTime) % 2000 === 0) {
-		dispatchEvent(new CustomEvent('next-turn', { bubbles: true}));
-	} 
-	window.requestAnimationFrame(turnStyleFx);
-}
